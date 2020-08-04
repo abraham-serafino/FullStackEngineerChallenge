@@ -1,0 +1,156 @@
+Front end:
+    Login form in upper right corner
+    User details (user id and role) stored in App Context
+
+    Review List Page
+        list of employee reviews
+        for individual reviewers, only their assigned reviews will be listed
+        for admins, all reviews will be listed
+        pending reviews filtered by currently logged in employee's user id
+
+        - <component>: Simple clickable list of employee full names, ie:
+        - <component>: review list item 
+            ("You have incomplete performance reviews for the following: <- this text is for non-admins only
+                John Smith
+                Mary Sue
+                ")
+
+    Employee Performance Review Page
+        Simple form with basic questions:
+            - alerts about incoming changes with the option to "update"
+
+            - <component>: "On a Scale of 1-5 (1 being extremely poor and 5 being extremely excellent),
+                How well does John Smith:
+                    <component, repeated> Demonstrate consistent, reliable attendance
+                    <same component, repeated> Collaborate / function as a team player
+                    ~ Work Efficiency
+                    ~ Exhibit Performance that Aligns With the Corporate Vision
+
+            - In your own words, discuss areas where John Smith is DOING WELL? <- this is the same component  <- this is a component
+                <textarea>
+            - In your own words, discuss any areas where you think John Smith NEEDS IMPROVEMENT?
+
+            Everyone has a save button with displays a warning when overriding newer changes
+
+            Admins have a "close" button to close the review
+            Non-admins have a "complete" button to remove the review from their list of assigned reviews
+
+            Admins can add a checkmark next to the usernames of employees to assign as reviewers
+
+            stretch goal: a text box that admins can use to search for employees by full name, which adds the employees' name to a list inside
+            the text box, similar to Microsoft Outlook's "To:" field for outgoing emails.
+
+        Login component using Meteor's accounts-password plugin
+
+        Stretch goal: REST controller that serves a list of reviews, optionally filtered by employee
+        Stretch goal: REST controller that serves details about a given employee, including his current performance review
+
+Backend:
+    request handler ("Meteor method") for creating employees and/or updating their details (requires admin role)
+    request handler ("Meteor method") for retrieving employee details (requires admin role)
+
+    ~ creating (admin only) and updating (admin & employee) a review for an employee
+    ~ adding a review to an employee's list of assigned reviews (admin only)
+    ~ removing a review from an employee's list of assigned reviews (when they click "submit")
+
+    database connection string from environment variable; defaults to "localhost"
+
+    Error handling:
+        Human-readable error messages will propagate up to a Bootstrap alert
+
+    Request handler pattern:
+        (request, response) => {
+            // authenticate request - could/should be middleware but we only have 3 endpoints and very little time
+            // validate request body if updating or inserting
+            // call data model functions to perform CRUD & return the results with attendant status codes
+        }
+
+    Data layer ("helper") pattern:
+        (incoming model - OR - ID's to search by) => {
+            // validate incoming associations (see "Mongo collections" below)
+
+            // perform upsert or delete
+
+            // except in the DELETE case, always return the results of a search;
+            //      even create and update will return the resulting data
+        }
+
+    Mongo collections:
+        employee (named because Meteor has it's own "user" collection):
+            { username, 
+                user_id,                          // uuid, from meteor's user collection
+                fullName,                         // string
+                isAdmin,                          // boolean
+                assignedReviews: [uuid, uuid...], // must be a user_id      <- for multi-review stretch goal, each
+                                                                                assigned review looks like: {
+                                                                                    reviewee // uuid -> employee.user_id,
+                                                                                    startDate // number, UTC epoch time
+                                                                                }
+
+                performanceReview: { attendance,    // number, 1-5          <- for multi-review stretch goal, this would be an array
+                                    collaboration,  // number, 1-5
+                                    efficiency,     // number, 1-5
+                                    vision,         // number 1-5
+                                    needsImprovement,        // string
+                                    isDoingWell,              // string
+                                    isReviewClosed,         // boolean
+                                    startDate       // number, UTC epoch time
+                    }
+
+    Stretch goal:
+        build a comparable schema using a relational DB and include the SQL script in the deliverable:
+
+        employee_review table (employee_id, fullname, isAdmin, review_id, )
+
+        review table (review_id, reviewee_id -> employee_review_table.employee_id, attendance, collaboration,
+            efficiency, vision, needs_improvement, is_doing_well, start_date, review_closed)
+
+        review_assignment table (assignment_id, reviewer_id -> employee_review_table.employee_id,
+            review_id -> review.review_id)
+
+    Tech stack / assumptions
+        Meteor.JS (provides a full build system using webpack with support for ESNext,
+            socket-based client/server communication with live streaming data,
+            MongoDB support, and
+            hybrid mobile development using apache cordova out of the box --
+            with first-class plugins for React, server-side rendering, OAuth2-based security
+            )
+
+        Assumptions:
+            Each employee only has one performance review that is about them
+                stretch goal: support multiple reviews about the same employee
+
+            nothing needs to be saved or cached on the client side (eg using local storage)
+            The generic performance review questions listed above are sufficient
+            Do not need Redux or RxJS since this is such a simple application
+            Admins do not need/want to make up their own questions
+            Changes made by any reviewer affect the state of the review for everyone
+            this application is internal to the company, so server-side rendering is not necessary
+            Twitter bootstrap (specifically React Bootstrap)
+            Responsive, mobile-first design
+            Server load will be miniscule, so no need to use PM2, nGinx, or Docker
+                 - although docker would be nice for continuous integration purposes, so let's make it a stretch goal
+
+        Tech stack:
+            Instead of Redux Actions, will use Context and borrow concept of injectable services from Angular for REST calls
+                (see ?.js for an example)
+            React router
+            MongoDB (data model is extraordinarily simple so a normalized solution is unnecessary)
+            @hapi/Joi for model validation
+            Using meteor connect handlers for express-like endpoints (https://docs.meteor.com/packages/webapp.html)
+            Jest integration tests for connected components, no tests for "dumb" components
+            End-to-end tests (for REST services, time permitting) written in Jest using Isomorphic Fetch
+
+Procede as follows:
+
+1) identify tests (these may change as i learn more during development)
+2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, babel class properties plugin)
+3) MVP (single user editing a single review)
+4) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+5) support for multiple users (password protected) & assignment of reviews to non-admins by admins
+6) "complete"/"close" functionality
+7) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
+8) stretch goal: script to generate SQL schema
+9) stretch goal: multiple reviews about each employee
+10) stretch goal: outlook-like search box
+11) stretch goal: Docker file
