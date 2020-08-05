@@ -16,6 +16,13 @@ const HomePage = () => (
 
       <RoutesComponent />
     </Col>
+
+    <style jsx>{`
+      .navbar {
+          top: 3px;
+          border-radius: 10px 10px 0px 0px;
+        }
+    `}</style>
   </Row>
 )
 
