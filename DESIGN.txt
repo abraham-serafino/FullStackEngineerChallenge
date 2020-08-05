@@ -172,11 +172,12 @@ Proceed as follows:
 2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, styled-jsx, history, react-dom)
     remove insecure, autopublish Meteor packages, add accounts-password & accounts-ui
     initial route & landing page                                        X
-3) MVP (single user editing a single review)
-4) Employee List
-5) Create deployable & get connection string from env.
-6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
-7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
+3) MVP (Employee List)                                                  X
+4) Login page                                                           X
+4) Create review pane & wire it up to the employee admin view
+5) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+6) support for multiple users (password protected) & assignment of reviews to non-admins by admins
+7) Create deployable & get connection string from env.
 8) "complete"/"close" functionality
 9) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
 10) stretch goal: multiple reviews about each employee
