@@ -16,7 +16,7 @@ Front end:
         pencil icon next to each list item that enables editing the details
         "X" button to delete items
 
-        editable employee detail list item component (admin only)
+        editable employee detail list item component
             a check mark to save the details
 
         Plus button (admin only) - open a new editable employee detail list item row
@@ -39,13 +39,13 @@ Front end:
                 Mary Sue
                 ")
 
-            clicking this component takes you to the Employee Performance Review page
+            clicking this component slides out the Employee Performance Review pane
 
     Review List Page for non-admins
         Review List Component is embedded in this page
         Non-admins, so they can only see reviews they have been assigned to work on
 
-    Employee Performance Review Page
+    Employee Performance Review Pane
         Simple form with basic questions:
             - alerts about incoming changes with the option to "update"
 
@@ -62,7 +62,6 @@ Front end:
 
             Everyone has a save button with displays a warning when overriding newer changes
 
-            Admins have a "close" button to close the review
             Non-admins have a "complete" button to remove the review from their list of assigned reviews
 
             Admins can add a checkmark next to the usernames of employees to assign as reviewers
@@ -171,9 +170,12 @@ Procede as follows:
 1) identify tests (these may change as i learn more during development)
 2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, babel class properties plugin)
 3) MVP (single user editing a single review)
-4) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
-5) support for multiple users (password protected) & assignment of reviews to non-admins by admins
-6) "complete"/"close" functionality
+4) Review list (component which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+5) support for multiple users (password protected),
+    assignment of reviews to non-admins by admins,
+    review page for non-admins
+
+6) "complete" functionality
 7) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
 8) stretch goal: multiple reviews about each employee
 9) stretch goal: outlook-like search box
