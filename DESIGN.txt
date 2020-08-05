@@ -1,11 +1,35 @@
 Front end:
-    Login form in upper right corner
-    User details (user id and role) stored in App Context
+    Login Page
+        username
+        password
+        login button
+        bootstrap alert for login failure
+        infinite login attempts
+        successful login for admins goes to the employee admin page
+        successful login for admins goes to the review list page
 
-    Review List Page
+    User details (user id and role) stored in App Context
+    Logout button + username in top right corner
+
+    Employee Admin Page (admin only this is similar to a classic todo app)
+        List of employees (each list item is a component)
+        pencil icon next to each list item that enables editing the details
+        "X" button to delete items
+
+        editable employee detail list item component (admin only)
+            a check mark to save the details
+
+        Plus button (admin only) - open a new editable employee detail list item row
+
+        "review" link that expands a Review List component (or "no reviews")
+            below the current employee and above the next employee. Click up arrow,
+            or click the "review" link on another employee to re-hide
+
+        "no reviews" component - "This employee has no reviews
+                                   click _here_ to start one!" -> Employee Performance Review Page
+
+    Review List Component
         list of employee reviews
-        for individual reviewers, only their assigned reviews will be listed
-        for admins, all reviews will be listed
         pending reviews filtered by currently logged in employee's user id
 
         - <component>: Simple clickable list of employee full names, ie:
@@ -14,6 +38,12 @@ Front end:
                 John Smith
                 Mary Sue
                 ")
+
+            clicking this component takes you to the Employee Performance Review page
+
+    Review List Page for non-admins
+        Review List Component is embedded in this page
+        Non-admins, so they can only see reviews they have been assigned to work on
 
     Employee Performance Review Page
         Simple form with basic questions:
@@ -48,10 +78,13 @@ Front end:
 Backend:
     request handler ("Meteor method") for creating employees and/or updating their details (requires admin role)
     request handler ("Meteor method") for retrieving employee details (requires admin role)
-
+    ~ deleting an employee (and their associated records from all three collections)
     ~ creating (admin only) and updating (admin & employee) a review for an employee
-    ~ adding a review to an employee's list of assigned reviews (admin only)
-    ~ removing a review from an employee's list of assigned reviews (when they click "submit")
+    ~ retrieving a review about an employee
+    ~ retrieving a list of reviews about an employee
+    ~ associating a review with an employer who will review it (admin only)
+    ~ removing an association between a review and the assigned reviewer
+        (when they click "submit" or the employee is deleted)
 
     database connection string from environment variable; defaults to "localhost"
 
@@ -79,34 +112,26 @@ Backend:
         employee (named because Meteor has it's own "user" collection):
             { username, 
                 user_id,                          // uuid, from meteor's user collection
-                fullName,                         // string
-                isAdmin,                          // boolean
-                assignedReviews: [uuid, uuid...], // must be a user_id      <- for multi-review stretch goal, each
-                                                                                assigned review looks like: {
-                                                                                    reviewee // uuid -> employee.user_id,
-                                                                                    startDate // number, UTC epoch time
-                                                                                }
+                fullName,                          // string
+                }
 
-                performanceReview: { attendance,    // number, 1-5          <- for multi-review stretch goal, this would be an array
-                                    collaboration,  // number, 1-5
-                                    efficiency,     // number, 1-5
-                                    vision,         // number 1-5
-                                    needsImprovement,        // string
-                                    isDoingWell,              // string
-                                    isReviewClosed,         // boolean
-                                    startDate       // number, UTC epoch time
-                    }
+        performanceReview: { _id,
+                            reviewee,      // uuid, = employee.user_id
+                            attendance,     // number, 1-5
+                            collaboration,  // number, 1-5
+                            efficiency,     // number, 1-5
+                            vision,         // number 1-5
+                            needsImprovement,        // string
+                            isDoingWell,              // string
+                            isReviewClosed,         // boolean
+                            startDate       // number, UTC epoch time
+                            }
 
-    Stretch goal:
-        build a comparable schema using a relational DB and include the SQL script in the deliverable:
+        THE NEXT TABLE ESTABLISHES A ONE-TO-MANY RELATIONSHIP BETWEEN EMPLOYEES,
+        THE REVIEWS THEY ARE PARTICIPATING IN, AND REVIEWS THAT ARE ABOUT THEM:
 
-        employee_review table (employee_id, fullname, isAdmin, review_id, )
-
-        review table (review_id, reviewee_id -> employee_review_table.employee_id, attendance, collaboration,
-            efficiency, vision, needs_improvement, is_doing_well, start_date, review_closed)
-
-        review_assignment table (assignment_id, reviewer_id -> employee_review_table.employee_id,
-            review_id -> review.review_id)
+        reviewAssignment: { reviewer,           // uuid, = employee.user_id
+                            review_id,          // uuid, = performanceReview._id
 
     Tech stack / assumptions
         Meteor.JS (provides a full build system using webpack with support for ESNext,
@@ -150,7 +175,6 @@ Procede as follows:
 5) support for multiple users (password protected) & assignment of reviews to non-admins by admins
 6) "complete"/"close" functionality
 7) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
-8) stretch goal: script to generate SQL schema
-9) stretch goal: multiple reviews about each employee
-10) stretch goal: outlook-like search box
-11) stretch goal: Docker file
+8) stretch goal: multiple reviews about each employee
+9) stretch goal: outlook-like search box
+10) stretch goal: Docker file
