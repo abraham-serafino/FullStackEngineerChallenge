@@ -166,15 +166,19 @@ Backend:
             Jest integration tests for connected components, no tests for "dumb" components
             End-to-end tests (for REST services, time permitting) written in Jest using Isomorphic Fetch
 
-Procede as follows:
+Proceed as follows:
 
-1) identify tests (these may change as i learn more during development)
-2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, babel class properties plugin)
+1) identify tests (these may change as i learn more during development) X
+2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, styled-jsx, history, react-dom)
+    remove insecure, autopublish Meteor packages, add accounts-password & accounts-ui
+    initial route & landing page
 3) MVP (single user editing a single review)
-4) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
-5) support for multiple users (password protected) & assignment of reviews to non-admins by admins
-6) "complete"/"close" functionality
-7) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
-8) stretch goal: multiple reviews about each employee
-9) stretch goal: outlook-like search box
-10) stretch goal: Docker file
+4) Employee List
+5) Create deployable & get connection string from env.
+6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
+8) "complete"/"close" functionality
+9) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
+10) stretch goal: multiple reviews about each employee
+11) stretch goal: outlook-like search box
+12) stretch goal: Docker file
