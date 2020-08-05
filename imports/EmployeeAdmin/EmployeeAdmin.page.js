@@ -1,34 +1,32 @@
 import { Button, Col, Form, ListGroup } from "react-bootstrap"
-import React, { Fragment, useEffect, useState } from "react"
 import { Employees, employeeListSubscription } from
     "/imports/EmployeeAdmin/Employee.model"
+import React, { Fragment, useEffect, useState } from "react"
+import { useTracker } from "meteor/react-meteor-data"
 
-const EditableEmployee = ({ username, fullName, isAdmin, saveEmployee }) => {
-  const [employee, setEmployee] = useState({ username, fullName, isAdmin })
+const saveEmployee = (employee) => Meteor.call("employees.save", employee)
+
+const EmployeeForm = ({ details }) => {
+  const [employee, setEmployee] = useState(details)
 
   const update = ({
-    isStillEditable = true,
     username = employee.username,
     fullName = employee.fullName,
-    isAdmin = employee.isAdmin
+    isAdmin = employee.isAdmin || false
   }) => {
-    if (isStillEditable) {
-      setEmployee({username, fullName, isAdmin, isEditable: isStillEditable})
-    }
-
-    saveEmployee({ username, fullName, isAdmin, isEditable: isStillEditable })
+    setEmployee({ username, fullName, isAdmin })
   }
 
   const changeUsername = (e) => update({ username: e.target.value })
   const changeFullName = (e) => update({ fullName: e.target.value })
-  const changeIsAdmin = (e) => update({ isAdmin: e.target.checked })
+  const changeIsAdmin = (e) => update({ isAdmin: !! e.target.checked })
 
   const save = (e) => {
     e.preventDefault()
     const { fullName, username } = employee
 
     if (typeof fullName === "string" && typeof username === "string") {
-      update({ isStillEditable: false })
+      saveEmployee(employee)
     }
   }
 
@@ -41,7 +39,7 @@ const EditableEmployee = ({ username, fullName, isAdmin, saveEmployee }) => {
             <Form.Control className="mb-2"
                           id="fullName"
                           placeholder="Jane Doe"
-                          value={fullName}
+                          value={employee.fullName}
                           onChange={changeFullName}
                           />
           </Col>
@@ -51,7 +49,7 @@ const EditableEmployee = ({ username, fullName, isAdmin, saveEmployee }) => {
             <Form.Control className="mb-2"
                           id="fullName"
                           placeholder="jdoe"
-                          value={username}
+                          value={employee.username}
                           onChange={changeUsername}
                           />
           </Col>
@@ -61,7 +59,7 @@ const EditableEmployee = ({ username, fullName, isAdmin, saveEmployee }) => {
                         id="autoSizingCheck"
                         className="mb-2"
                         label="Administrator"
-                        value={isAdmin}
+                        value={employee.isAdmin}
                         onChange={changeIsAdmin}
                         />
           </Col>
@@ -81,72 +79,44 @@ const EditableEmployee = ({ username, fullName, isAdmin, saveEmployee }) => {
     )
 }
 
-const Employee = ({ fullName, username, isAdmin }) => (
+const Employee = ({ employee }) => (
   <ListGroup.Item>
-    {fullName} / {username} {isAdmin ? "(admin)" : ""}
+    {employee.fullName} / {employee.username}
+    {employee.isAdmin ? " (admin)" : ""}
   </ListGroup.Item>
 )
 
-const EmployeeList = ({ employeeList, updateEmployeeAt }) =>
-  <ListGroup>
-    {employeeList.map((employee, i) =>
-      employee.isEditable ?
-        <EditableEmployee fullName={employee.fullName}
-                          username={employee.username}
-                          saveEmployee={
-                            (employee) => updateEmployeeAt(i, employee)
-                            }
-                          id={employee.id}
-                          key={i}
-                          /> :
+const EmployeeList = ({ employeeList }) => {
+  const [listItems, setListItems] = useState([])
 
-        <Employee fullName={employee.fullName}
-                  username={employee.username}
-                  isAdmin={employee.isAdmin}
-                  id={employee.id}
-                  key={i}
-                  />
-      )}
-  </ListGroup>
-
-const EmployeeAdminPage = () => {
-  const [pageState, setPageState] = useState({})
-  const { employeeList = [] } = pageState
-
-  // update employee list each time it changes on the server
-  // useEffect(() => {
-  //
-  //   // Meteor sets the "ready" flag when the results of a query change
-  //   if (employeeListSubscription.ready()) {
-  //     setPageState({ employeeList: Employees.find() })
-  //   }
-  // })
+  useEffect(() => setListItems(employeeList), [employeeList])
 
   const onClickAdd = () => {
-    setPageState({
-      employeeList: employeeList.concat({
+    setListItems(listItems.concat({
+      type: "editable",
+      payload: {
         fullName: "",
-        isEditable: true
-      })
-    })
-  }
-
-  const updateEmployeeAt = (index, employee) => {
-    employeeList[index] = employee
-    setPageState({ employeeList })
+        username: "",
+        isAdmin: false
+      }
+    }))
   }
 
   return (
     <Fragment>
-      <EmployeeList employeeList={employeeList}
-                    updateEmployeeAt={updateEmployeeAt}
-                    />
+      <ListGroup>
+        {listItems.map((item, i) =>
+          item.type === "editable" ?
+            <EmployeeForm details={item.payload} key={i} /> :
+            <Employee employee={item} key={i} />
+            )}
+      </ListGroup>
 
       <div className={"text-right"}>
         <Button className={"ml-left plus-button"}
-                onClick={onClickAdd}>
-          +
-          </Button>
+          onClick={onClickAdd}>
+            +
+        </Button>
       </div>
 
       <style jsx>{`
@@ -160,6 +130,17 @@ const EmployeeAdminPage = () => {
       `}</style>
     </Fragment>
   )
+}
+
+const EmployeeAdminPage = () => {
+  // useTracker is a Meteor HOC that enables clients to "track"
+  // changes to server-side data in real time.
+  const employeeList = useTracker(() => {
+    Meteor.subscribe("employees.list")
+    return Employees.find().fetch()
+  })
+
+  return <EmployeeList employeeList={employeeList} />
 }
 
 export default EmployeeAdminPage
