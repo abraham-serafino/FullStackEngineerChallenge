@@ -171,7 +171,7 @@ Proceed as follows:
 1) identify tests (these may change as i learn more during development) X
 2) scaffolding (meteor, react, react router, react-bootstrap, jest, @hapi/joi, moment, lodash, styled-jsx, history, react-dom)
     remove insecure, autopublish Meteor packages, add accounts-password & accounts-ui
-    initial route & landing page
+    initial route & landing page                                        X
 3) MVP (single user editing a single review)
 4) Employee List
 5) Create deployable & get connection string from env.
