@@ -2,7 +2,6 @@ import { Button, Col, Form, ListGroup } from "react-bootstrap"
 import { Employees, employeeListSubscription } from
     "/imports/EmployeeAdmin/Employee.model"
 import React, { Fragment, useEffect, useState } from "react"
-import { Redirect } from "react-router"
 import { useTracker } from "meteor/react-meteor-data"
 
 const saveEmployee = (employee) => Meteor.call("employees.save", employee)

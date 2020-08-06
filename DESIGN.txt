@@ -8,10 +8,10 @@ Front end:
         successful login for admins goes to the employee admin page
         successful login for admins goes to the review list page
 
-    User details (user id and role) stored in App Context
-    Logout button + username in top right corner
+    User details (user id, username, full name and role) stored in App Context
+    Logout button + full name in top right corner
 
-    Employee Admin Page (admin only this is similar to a classic todo app)
+    Employee Admin Page (admin only - this is similar to a classic todo app)
         List of employees (each list item is a component)
         pencil icon next to each list item that enables editing the details
         "X" button to delete items
@@ -173,13 +173,13 @@ Proceed as follows:
     remove insecure, autopublish Meteor packages, add accounts-password & accounts-ui
     initial route & landing page                                        X
 3) MVP (Employee List)                                                  X
-4) Login page
-4) Create review pane & wire it up to the employee admin view
-5) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
-6) support for multiple users (password protected) & assignment of reviews to non-admins by admins
-7) Create deployable & get connection string from env.
-8) "complete"/"close" functionality
-9) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
-10) stretch goal: multiple reviews about each employee
-11) stretch goal: outlook-like search box
-12) stretch goal: Docker file
+4) Login page                                                           X
+5) Create review pane & wire it up to the employee admin view
+6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
+8) Create deployable & get connection string from env.
+9) "complete"/"close" functionality
+10) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
+11) stretch goal: multiple reviews about each employee
+12) stretch goal: outlook-like search box
+13) stretch goal: Docker file
