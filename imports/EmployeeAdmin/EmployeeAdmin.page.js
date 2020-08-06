@@ -2,6 +2,7 @@ import { Button, Col, Form, ListGroup } from "react-bootstrap"
 import { Employees, employeeListSubscription } from
     "/imports/EmployeeAdmin/Employee.model"
 import React, { Fragment, useEffect, useState } from "react"
+import { Redirect } from "react-router"
 import { useTracker } from "meteor/react-meteor-data"
 
 const saveEmployee = (employee) => Meteor.call("employees.save", employee)
@@ -70,7 +71,7 @@ const EmployeeForm = ({ details }) => {
         </Form.Row>
       </Form>
 
-      <style jsx>{`
+      <style jsx={"true"}>{`
         .saveButton {
           margin-left: 89px;
           }
@@ -119,13 +120,14 @@ const EmployeeList = ({ employeeList }) => {
         </Button>
       </div>
 
-      <style jsx>{`
+      <style jsx={"true"}>{`
         .plus-button {
           font-weight: 850;
           font-size: 1.5rem;
           border-radius: 25px;
           margin-top: 7px;
           padding-top: inherit;
+          padding-bottom: unset;
         }
       `}</style>
     </Fragment>

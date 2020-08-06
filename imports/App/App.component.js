@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react"
-import HomePage from "/imports/App/Home.page"
+import Router from "/imports/App/Routes.component"
 
 import "bootstrap/dist/css/bootstrap.min.css"
 
@@ -10,7 +10,7 @@ const AppComponent = () => {
 
   return (
     <AppContext.Provider value={{appState, setAppState}}>
-      <HomePage />
+      <Router />
     </AppContext.Provider>
   )
 }
