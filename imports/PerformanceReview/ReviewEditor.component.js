@@ -6,16 +6,8 @@ import { PerformanceReviews } from
 import PropTypes from "prop-types"
 import React, { useEffect, useState } from "react"
 
-const OneToFiveRating = ({ label, fieldName, onUpdateRating }) => {
-  const [rating, setRating] = useState(3)
-
-  const onChangeRating = (value) => {
-    setRating(value)
-    onUpdateRating(value)
-  }
-
-  return (
-    <Row>
+const OneToFiveRating = ({ label, fieldName, rating = 3, onUpdateRating }) => (
+  <Row>
     <Form.Group>
       <Col xs={"auto"}>
         <Form.Label htmlFor={fieldName}>{label}</Form.Label>
@@ -25,7 +17,7 @@ const OneToFiveRating = ({ label, fieldName, onUpdateRating }) => {
         <ToggleButtonGroup id={fieldName}
                            type={"radio"}
                            value={rating}
-                           onChange={onChangeRating}
+                           onChange={onUpdateRating}
                            name={`${fieldName}-rating`}
                             >
 
@@ -37,9 +29,8 @@ const OneToFiveRating = ({ label, fieldName, onUpdateRating }) => {
         </ToggleButtonGroup>
       </Col>
     </Form.Group>
-    </Row>
-    )
-}
+  </Row>
+)
 
 const ReviewEditorComponent = ({ reviewee, onSave }) => {
   if (reviewee === null || typeof reviewee._id !== "string") {
@@ -98,6 +89,7 @@ const ReviewEditorComponent = ({ reviewee, onSave }) => {
           <OneToFiveRating fieldName={key}
                            label={ONE_TO_FIVE_SCALE_QUESTIONS[key]}
                            onUpdateRating={updateReviewValue(key)}
+                           rating={review[key]}
                            key={`rating-${key}`}
                             />
           )}
