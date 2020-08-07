@@ -19,6 +19,7 @@ else if (Meteor.isClient) {
 
 const employeeSchema = Joi.object({
   _id: Joi.string(), // optional
+  userId: Joi.string().required(),
   username: Joi.string().required(),
   fullName: Joi.string().required(),
   isAdmin: Joi.boolean().required()

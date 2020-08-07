@@ -174,7 +174,7 @@ Proceed as follows:
 3) MVP (Employee List)                                                  X
 4) Login page                                                           X
 5) Create review pane & wire it up to the employee admin view           X
-6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
+6) Review list (non-admin page which allows user to open assigned reviews + accompanying API calls & handlers)
 7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
 8) create a "slide-out" layover for review editor
 9) "complete"/"close" functionality
