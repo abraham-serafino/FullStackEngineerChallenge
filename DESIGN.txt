@@ -49,7 +49,7 @@ Front end:
         Simple form with basic questions:
             - alerts about incoming changes with the option to "update"
 
-            - <component>: "On a Scale of 1-5 (1 being extremely poor and 5 being extremely excellent),
+            - <component>: "On a Scale of 1-5 (1 being extremely poor and 5 being extremely excellent), X
                 How well does John Smith:
                     <component, repeated> Demonstrate consistent, reliable attendance
                     <same component, repeated> Collaborate / function as a team player
@@ -60,7 +60,7 @@ Front end:
                 <textarea>
             - In your own words, discuss any areas where you think John Smith NEEDS IMPROVEMENT?
 
-            Everyone has a save button with displays a warning when overriding newer changes
+            Everyone has a save button (X) which displays a warning when overriding newer changes
 
             Admins have a "close" button to close the review
             Non-admins have a "complete" button to remove the review from their list of assigned reviews
@@ -173,13 +173,12 @@ Proceed as follows:
     initial route & landing page                                        X
 3) MVP (Employee List)                                                  X
 4) Login page                                                           X
-5) Create review pane & wire it up to the employee admin view
-        * copy "updateValue" function to Login screen if it works well
-        *
+5) Create review pane & wire it up to the employee admin view           X
 6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
 7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
-8) Create deployable & get connection string from env.
+8) create a "slide-out" layover for review editor
 9) "complete"/"close" functionality
+10) Create deployable & get connection string from env.
 10) stretch goal: REST endpoints (with tests to demonstrate mastery of isomorphic fetch)
 11) stretch goal: multiple reviews about each employee
 12) stretch goal: outlook-like search box

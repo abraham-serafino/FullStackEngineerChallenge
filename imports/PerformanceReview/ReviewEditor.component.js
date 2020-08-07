@@ -32,6 +32,23 @@ const OneToFiveRating = ({ label, fieldName, rating = 3, onUpdateRating }) => (
   </Row>
 )
 
+const FreeFormQuestion = ({ fieldName,
+                            label,
+                            answerText = "",
+                            onUpdateAnswerText
+                            }) => (
+
+  <Form.Group controlId={fieldName}>
+    <Form.Label>{label}</Form.Label>
+
+    <Form.Control as="textarea"
+                  rows="3"
+                  value={answerText}
+                  onChange={onUpdateAnswerText}
+                  />
+  </Form.Group>
+)
+
 const ReviewEditorComponent = ({ reviewee, onSave }) => {
   if (reviewee === null || typeof reviewee._id !== "string") {
     return null
@@ -80,10 +97,12 @@ const ReviewEditorComponent = ({ reviewee, onSave }) => {
   }
 
   return (
-    <Row><Col xs={6}>
+    <Row><Col xs={8}>
       <Form onSubmit={saveReview}>
-        On a scale of 1-5 (with 1 being "Very poor", and 5 being "Excellent"),
+        On a scale of 1-5 with 1 being "Very poor", and 5 being "Excellent"),
         how well does {fullName}:
+
+        <p/>
 
         {Object.keys(ONE_TO_FIVE_SCALE_QUESTIONS).map((key) =>
           <OneToFiveRating fieldName={key}
@@ -93,6 +112,22 @@ const ReviewEditorComponent = ({ reviewee, onSave }) => {
                            key={`rating-${key}`}
                             />
           )}
+
+          <FreeFormQuestion fieldName={"needsImprovement"}
+                            label={`In your own words, discuss areas where ${fullName} NEEDS IMPROVEMENT?`}
+                            answerText={review.needsImprovement}
+                            onUpdateAnswerText={
+                              updateReviewValue("needsImprovement")
+                              }
+                            />
+
+          <FreeFormQuestion fieldName={"isDoingWell"}
+                            label={`In your own words, discuss areas where ${fullName} is DOING WELL?`}
+                            answerText={review.isDoingWell}
+                            onUpdateAnswerText={
+                              updateReviewValue("isDoingWell")
+                              }
+                            />
 
         <Button variant="primary" type="submit">Save</Button>
       </Form>

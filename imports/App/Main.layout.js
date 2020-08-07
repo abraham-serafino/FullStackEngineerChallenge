@@ -7,7 +7,7 @@ const MainLayout = ({ children }) => {
 
     return (
         <Row className={"d-flex justify-content-center"}>
-            <Col xs={12} md={5}>
+            <Col xs={11} lg={5}>
                 <Navbar bg="primary" variant="dark" sticky="top">
                     <Navbar.Brand href="#home">FSEC</Navbar.Brand>
 
