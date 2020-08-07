@@ -7,7 +7,7 @@ const LoginPage = () => {
         username: "",
         password: "",
         loginFailed: false
-    })
+        })
 
     const { username, password, loginFailed } = loginDetails
 
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
     return (
         <Form onSubmit={login}>
-            <Form.Group controlId="">
+            <Form.Group>
                 <Form.Label htmlFor={"username"}>Username</Form.Label>
                 <Form.Control id="username"
                               value={username}
@@ -58,16 +58,12 @@ const LoginPage = () => {
                             />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-                Login
-            </Button>
+            <Button variant="primary" type="submit">Login</Button>
 
             {loginFailed ? (
                 <Alert variant={"danger"}>
                     Invalid username / password
-                </Alert>) :
-
-                null
+                </Alert>) : null
                 }
         </Form>
     )

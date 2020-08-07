@@ -9,9 +9,7 @@ let employeeListSubscription = []
 
 // only the results of "published" queries are available to the client
 if (Meteor.isServer) {
-  Meteor.publish("employees.list", () =>
-    Employees.find()
-  )
+  Meteor.publish("employees.list", () => Employees.find())
 }
 
 // client must subscribe in order to access queries

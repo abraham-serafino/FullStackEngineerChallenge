@@ -1,25 +1,25 @@
 Front end:
     Login Page
-        username
-        password
-        login button
-        bootstrap alert for login failure
-        infinite login attempts
-        successful login for admins goes to the employee admin page
+        X username
+        X password
+        X login button
+        X bootstrap alert for login failure
+        X infinite login attempts
+        X successful login for admins goes to the employee admin page
         successful login for admins goes to the review list page
 
     User details (user id, username, full name and role) stored in App Context
-    Logout button + full name in top right corner
+    Logout button(X) + full name in top right corner
 
     Employee Admin Page (admin only - this is similar to a classic todo app)
-        List of employees (each list item is a component)
+        X List of employees (each list item is a component)
         pencil icon next to each list item that enables editing the details
         "X" button to delete items
 
-        editable employee detail list item component (admin only)
-            a check mark to save the details
+        X editable employee detail list item component
+            X a button to save the details
 
-        Plus button (admin only) - open a new editable employee detail list item row
+        X Plus button - open a new editable employee detail list item row
 
         "review" link that expands a Review List component (or "no reviews")
             below the current employee and above the next employee. Click up arrow,
@@ -123,8 +123,7 @@ Backend:
                             vision,         // number 1-5
                             needsImprovement,        // string
                             isDoingWell,              // string
-                            isReviewClosed,         // boolean
-                            startDate       // number, UTC epoch time
+                            isReviewClosed         // boolean
                             }
 
         THE NEXT TABLE ESTABLISHES A ONE-TO-MANY RELATIONSHIP BETWEEN EMPLOYEES,
@@ -175,6 +174,8 @@ Proceed as follows:
 3) MVP (Employee List)                                                  X
 4) Login page                                                           X
 5) Create review pane & wire it up to the employee admin view
+        * copy "updateValue" function to Login screen if it works well
+        *
 6) Review list (admin view which allows creation of new reviews and edit existing + accompanying API calls & handlers)
 7) support for multiple users (password protected) & assignment of reviews to non-admins by admins
 8) Create deployable & get connection string from env.

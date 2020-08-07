@@ -1,18 +1,23 @@
-import { Button, Col, Form, ListGroup } from "react-bootstrap"
+import {Button, ListGroup, NavLink} from "react-bootstrap"
 import { Employees } from "/imports/EmployeeAdmin/Employee.model"
 import EmployeeForm from "/imports/EmployeeAdmin/EmployeeForm.component"
 import React, { Fragment, useEffect, useState } from "react"
+import ReviewEditor from "/imports/PerformanceReview/ReviewEditor.component"
 import { useTracker } from "meteor/react-meteor-data"
 
-const Employee = ({ employee }) => (
-  <ListGroup.Item>
+const Employee = ({ employee, showReviewEditor }) => {
+  const onShowReviewEditor = () => showReviewEditor(employee)
+
+  return <ListGroup.Item>
     {employee.fullName} / {employee.username}
-    {employee.isAdmin ? " (admin)" : ""}
+    {employee.isAdmin ? " (admin)" : ""} -&nbsp;
+    <a href={"#"} onClick={onShowReviewEditor}>review</a>
   </ListGroup.Item>
-)
+}
 
 const EmployeeList = ({ employeeList }) => {
   const [listItems, setListItems] = useState([])
+  const [selectedEmployee, setSelectedEmployee] = useState(null)
 
   useEffect(() => setListItems(employeeList), [employeeList])
 
@@ -29,20 +34,30 @@ const EmployeeList = ({ employeeList }) => {
 
   return (
     <Fragment>
-      <ListGroup>
-        {listItems.map((item, i) =>
-          item.type === "editable" ?
-            <EmployeeForm details={item.payload} key={i} /> :
-            <Employee employee={item} key={i} />
-            )}
-      </ListGroup>
+      {selectedEmployee ?
+        <ReviewEditor reviewee={selectedEmployee}
+                      onSave={() => setSelectedEmployee(null)}
+                      /> :
 
-      <div className={"text-right"}>
-        <Button className={"ml-left plus-button"}
-          onClick={onClickAdd}>
-            +
-        </Button>
-      </div>
+        <ListGroup>
+          {listItems.map((item, i) =>
+            item.type === "editable" ?
+              <EmployeeForm details={item.payload} key={i} /> :
+
+              <Employee employee={item}
+                        showReviewEditor={setSelectedEmployee}
+                        key={i}
+                        />
+              )}
+
+          <div className={"text-right"}>
+            <Button className={"ml-left plus-button"}
+                    onClick={onClickAdd}>
+              +
+            </Button>
+          </div>
+        </ListGroup>
+        }
 
       <style jsx={"true"}>{`
         .plus-button {
@@ -50,7 +65,7 @@ const EmployeeList = ({ employeeList }) => {
           font-size: 1.5rem;
           border-radius: 25px;
           margin-top: 7px;
-          padding-top: inherit;
+          padding-top: 0;
           padding-bottom: unset;
         }
       `}</style>
